@@ -1,5 +1,3 @@
-#this set is used for creating boundries in the model to prevent overfitting
-
 Age,Height_cm,Sleep_Hours,Resting_HR,HRV,Fatigue_Level,Muscle_Soreness,Stress_Level,Last_Training_Duration_Mins,Last_Session_Jump_Count,Historical_High_Intensity_Load,Last_Session_RPE,Agility_Test_Time,Hydration_Level,Menstrual_Phase,Pre_Match_Injury_Flag,Match_Ready
 17,180,6.0,69,51,7,7,6,120,245,98,9,15.0,67,Luteal,1,0
 20,186,7.9,59,81,2,2,2,70,145,52,4,12.8,87,Ovulatory,0,1

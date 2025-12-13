@@ -1,42 +1,63 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-df_train = pd.read_csv("player_data.csv")
-print(df_train.head())
+def fit_preprocessing(df_train, target_column):
+    #Learning how to process data
 
-def fit_preprocessing(df_test, target_column):
+    train_rules = df_train.drop(columns = [target_column])
 
-    #imputation
+    numeric_cols = train_rules.select_dtypes(include="number").columns.tolist()
+    categorical_cols = train_rules.select_dtypes(exclude="number").columns.tolist()
 
-    columns_with_empty_elements = df_train.columns[df_train.isna().any()].tolist()
-    for i in range(0,len(columns_with_empty_elements)):
-        current_column =columns_with_empty_elements[i]
-        column_median = df_train[current_column].median()
+    # Imputation
+    
+    medians = train_rules[numeric_cols].median()
 
-        df_train[current_column] = df_train[current_column].fillna(column_median)
+    # Encoding categorical attributes (One Hot Encoding)
 
-    #encoding categorical attributes (One Hot Encoding)
+    train_features_encoded = pd.get_dummies(train_rules, columns = categorical_cols, drop_first = True)
+    encoded_cols = train_features_encoded.columns.to_list()
 
-    non_numerical_columns = [col for col in df_train.columns: if not pd.api.types.is_numeric_dtype(df_train[col])]
-    for i in range(0,len(non_numerical_columns)):
-        dummies =  pd.get_dummies(df_train[non_numerical_columns[i]], drop_first = True)
+    # Scalling(standardization)
 
-    #scalling(standardization)
-
-    total_rows = len(df_train)
-    THRESHOLD = 0.05
-
-    scaling_columns = [col for col in df_train.columns: if df_train[col].nunique()/total_rows > THRESHOLD]
     scaler = StandardScaler()
-    scaler.fit(df_train[scaling_cols])
+    scaler.fit(train_features_encoded[numeric_cols])
 
-    df_train[scaling_cols] = scaler.transform(df_train[scaling_cols])
+    return{"numeric_cols": numeric_cols, "categorical_cols": categorical_cols, "medians": medians, "encoded_cols": encoded_cols, "scaler": scaler}
 
+def preprocessing_data(df,preprocessing_rules , target_column = None):
+    #Applying 'rules' learnt from fit_processing function
 
+    df = df.copy()
 
+    if target_column != None and target_column in df.columns:
+        y = df[target_column]
+        X = df.drop(columns = [target_column])
+    else:
+        y = None
+        X = df
 
+    # Imputation
 
+    X[preprocessing_rules["numeric_cols"]] = X[preprocessing_rules["numeric_cols"]].fillna(preprocessing_rules["medians"])
 
+    # One hot encoding
 
+    X = pd.get_dummies(X, columns = preprocessing_rules["categorical_cols"], drop_first = True)
 
+    X= X.reindex(columns = preprocessing_rules["encoded_cols"], fill_value = 0)  # column alingment
+    X = X.astype(float) #so numeric value are retuned(not bool)
 
+    # Scalling
+    scaler = preprocessing_rules["scaler"]
+    numeric_cols = preprocessing_rules["numeric_cols"]
+
+    X[numeric_cols] = scaler.transform(X[numeric_cols])
+
+    return X,y
+
+df_train = pd.read_csv("training_set.csv")
+df_val = pd.read_csv("validation_set.csv")
+
+preprocessing_rules = fit_preprocessing(df_train, "Match_Ready")
+print(preprocessing_data(df_val, preprocessing_rules, "Match_Ready"))

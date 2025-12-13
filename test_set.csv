@@ -1,5 +1,3 @@
-#this set is used to provide an unbiased assesment of the predictability of readyness
-
 Age,Height_cm,Sleep_Hours,Resting_HR,HRV,Fatigue_Level,Muscle_Soreness,Stress_Level,Last_Training_Duration_Mins,Last_Session_Jump_Count,Historical_High_Intensity_Load,Last_Session_RPE,Agility_Test_Time,Hydration_Level,Menstrual_Phase,Pre_Match_Injury_Flag,Match_Ready
 22,190,5.0,75,40,9,9,8,140,280,115,10,16.0,60,Luteal,1,0
 18,181,8.5,56,90,1,1,1,55,115,38,2,12.5,95,Ovulatory,0,1
