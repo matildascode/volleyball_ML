@@ -1,0 +1,20 @@
+#this data is used to train the model into knowing the relationship between different attributes and readness
+
+Age,Height_cm,Sleep_Hours,Resting_HR,HRV,Fatigue_Level,Muscle_Soreness,Stress_Level,Last_Training_Duration_Mins,Last_Session_Jump_Count,Historical_High_Intensity_Load,Last_Session_RPE,Agility_Test_Time,Hydration_Level,Menstrual_Phase,Pre_Match_Injury_Flag,Match_Ready
+19,185,8.0,58,82,2,3,2,70,140,50,4,12.8,88,Follicular,0,1
+20,188,7.2,60,78,3,2,3,80,160,60,5,13.0,85,Ovulatory,0,1
+18,182,6.0,66,55,6,6,5,110,220,85,8,14.5,72,Luteal,0,0
+21,186,7.8,59,80,2,3,2,65,130,48,4,12.9,90,Follicular,0,1
+19,183,6.5,63,68,4,4,4,90,180,70,6,13.6,80,Menstrual,0,1
+22,190,5.8,72,50,7,7,6,120,240,95,9,15.1,68,Luteal,1,0
+17,180,7.5,61,76,3,3,3,75,150,58,5,13.1,86,Ovulatory,0,1
+20,184,7.0,59,70,4,5,4,85,170,65,6,13.4,82,Follicular,0,1
+23,187,6.9,63,69,4,4,4,85,175,68,6,13.5,81,Follicular,0,1
+18,181,8.3,57,88,1,1,1,50,110,35,2,12.4,93,Ovulatory,0,0
+19,179,5.9,70,52,7,8,6,125,250,100,9,15.3,66,Luteal,1,0
+20,185,7.5,60,78,2,2,3,75,150,55,5,12.9,85,Ovulatory,0,1
+21,189,6.2,67,56,6,6,5,115,230,90,8,14.8,70,Luteal,0,0
+19,184,8.1,57,85,1,2,1,60,120,40,3,12.7,90,Follicular,0,1
+22,188,5.5,70,45,8,8,7,130,260,105,9,15.5,65,Luteal,1,0
+18,182,7.0,63,68,4,4,4,95,185,72,6,13.7,78,Menstrual,0,1
+23,191,6.8,65,72,3,3,3,100,190,75,7,13.9,80,Follicular,0,1
