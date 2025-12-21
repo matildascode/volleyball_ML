@@ -1,6 +1,11 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+def clean_column_names(df):
+    df = df.copy()
+    df.columns = df.columns.str.strip()
+    return df
+
 def fit_preprocessing(df_train, target_column):
     #Learning how to process data
 
@@ -55,9 +60,3 @@ def preprocessing_data(df,preprocessing_rules , target_column = None):
     X[numeric_cols] = scaler.transform(X[numeric_cols])
 
     return X,y
-
-df_train = pd.read_csv("training_set.csv")
-df_val = pd.read_csv("validation_set.csv")
-
-preprocessing_rules = fit_preprocessing(df_train, "Match_Ready")
-print(preprocessing_data(df_val, preprocessing_rules, "Match_Ready"))
