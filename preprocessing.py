@@ -7,7 +7,9 @@ def clean_column_names(df):
     return df
 
 def fit_preprocessing(df_train, target_column):
-    #Learning how to process data
+    '''
+    Uses scalling and One Hot encoding to make sure the data is
+    '''
 
     train_rules = df_train.drop(columns = [target_column])
 

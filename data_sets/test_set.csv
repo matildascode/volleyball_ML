@@ -1,0 +1,16 @@
+Age,Height_cm,Sleep_Hours,Resting_HR,HRV,Fatigue_Level,Muscle_Soreness,Stress_Level,Last_Training_Duration_Mins,Last_Session_RPE,Menstrual_Phase,Pre_Match_Injury_Flag,Match_Ready
+19,184,7.0,62,71,4,4,3,90,6,Follicular,0,1
+20,186,5.9,69,53,7,6,6,115,8,Luteal,0,0
+18,181,8.5,55,91,1,1,1,50,2,Ovulatory,0,1
+22,189,6.3,66,61,5,5,4,100,7,Menstrual,0,0
+21,188,7.8,58,83,2,2,2,70,4,Follicular,0,1
+19,182,5.4,73,45,9,8,8,135,10,Luteal,1,0
+23,192,6.7,65,64,5,4,4,95,7,Menstrual,0,0
+20,185,7.3,60,75,3,3,3,80,5,Ovulatory,0,1
+18,180,6.0,68,56,6,6,5,105,8,Luteal,0,0
+21,187,8.1,57,87,1,2,1,60,3,Follicular,0,1
+22,190,5.7,71,49,8,7,7,125,9,Luteal,1,0
+19,183,7.5,61,77,3,3,3,75,5,Ovulatory,0,1
+20,186,6.1,67,58,6,5,5,110,8,Luteal,0,0
+23,191,7.9,59,82,2,2,2,70,4,Follicular,0,1
+18,181,5.8,70,51,7,7,6,120,9,Luteal,1,0

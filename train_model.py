@@ -1,17 +1,9 @@
-from preprocessing import clean_column_names, fit_preprocessing, preprocessing_data
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
-df_train = clean_column_names(pd.read_csv("training_set.csv"))
-df_val = clean_column_names(pd.read_csv("validation_set.csv"))
-
-preprocessing_rules = fit_preprocessing(df_train, "Match_Ready")
-
-X_val, y_val = preprocessing_data(df_val, preprocessing_rules, "Match_Ready")
+import numpy as np
 
 class MyLogisticRegression :
 
-    def __init__(self, learning_rate=0.01, iterations=1000, monitor_training = True):
+    def __init__(self, learning_rate=0.1, iterations=10000, monitor_training = True):
         '''
         Sets hyperparameters and initliazes model parameters
 
@@ -57,12 +49,16 @@ class MyLogisticRegression :
             # Linear combinations of features
             linear_output = np.dot(X, self.weights) + self.bias
 
-            y_pred = self._sigmoid(linear_output) 
+            y_pred = self.sigmoid(linear_output) 
+            # Avoid log(0) by making sure y_pred is in correct range
+            eps = 1e-15
+            y_pred = np.clip(y_pred, eps, 1 - eps)
+
 
             # Binary cross-entropy loss
             loss = -np.mean( y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred))
 
-            if self.monitor_training:
+            if self.monitor_training and i % 1000 == 0:
                 print(f"Iteration {i} has a loss of {loss}")
 
             # Gradient decent
@@ -73,18 +69,17 @@ class MyLogisticRegression :
             self.weights -= self.learning_rate * dw
             self.bias -= self.learning_rate * db
     
-    def prediction(self, X):
+    def predict(self, X, threshold = 0.5):
         '''
         Makes predictions on new data in binary output
         '''
-        predictions = np.zeros_like(probabilities, dtype=int)
 
         z = np.dot(X, self.weights) + self.bias
-        probability = self._sigmoid(z)
+        probabilities = self.sigmoid(z)
+        predictions = np.zeros_like(probabilities, dtype=int)
 
         # Assign 1 to any probability above the threshold (default is 0)
         predictions[probabilities >= threshold] = 1
 
         return predictions
-
 
