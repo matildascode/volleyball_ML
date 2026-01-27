@@ -81,5 +81,15 @@ class MyLogisticRegression :
         # Assign 1 to any probability above the threshold (default is 0)
         predictions[probabilities >= threshold] = 1
 
-        return predictions
+        return predictions,probabilities
+    
+    def accuracy_test(self,X_train, y_train,X_val, y_val, X_test, y_test):
+        datasets = [("Training", X_train, y_train),("Validation", X_val, y_val),("Test", X_test, y_test)]
+
+        for name, X, y in datasets:
+            preds = self.predict(X.values)[0]
+            accuracy = (preds == y.values).mean()
+            print(f"{name} set accuracy: {accuracy:.2%}")
+            print(f"Predictions: {preds}")
+            print(f"True labels: {y.values}\n")
 
