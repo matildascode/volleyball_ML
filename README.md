@@ -47,12 +47,9 @@ Getting Started
 Prerequisites
  - Python 3.x
  - Pandas, NumPy, Scikit-learn
-
-Installation
-git clone https://github.com/your-username/volleyball-readiness.git
 cd volleyball-readiness
 pip install -r requirements.txt
 
-Usage
+Usage:
 Run the main script to train the model and enter player data for a real-time prediction:
     python main.py
