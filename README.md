@@ -1,55 +1,86 @@
 Volleyball Match-Readiness Prediction:
-An end-to-end Machine Learning pipeline using custom Logistic Regression to predict athlete availability and provide actionable recovery advice.
+An end-to-end machine learning pipeline that uses a logistic regression model, built from scratch in NumPy, to predict whether a volleyball player is match-ready, and gives personalised recovery advice when she is not.
 
 Project Overview
-In high-performance volleyball, "availability" is a competitive advantage. This project uses a custom-built Logistic Regression model to predict whether an athlete is match-ready based on a combination of biometric, training, and wellness data.
+In high-performance volleyball, availability is a competitive advantage. This project predicts match readiness from training, recovery and wellness data.
 
-Unlike a "black-box" model, this system provides interpretability, allowing coaches to see exactly which factors (e.g Sleep, Stress, or HRV) are negatively impacting a player's readiness.
+Unlike a black-box model, the weights of a logistic regression can be read directly. The advice system uses them to show which factors (for example sleep, stress or muscle soreness) are pulling a player's readiness down.
+
+Results
+
+
 
 The Data
-The model is trained and validated on three distinct datasets: training_set.csv, validation_set.csv, and test_set.csv
+The model uses three datasets in data_sets/: training_set.csv, validation_set.csv and test_set.csv.
+
+The data is synthetic. It was generated from rules I defined: wellness and load features move together, and Match_Ready is then drawn from a noisy probability, so a rested player is usually, but not always, ready. Noise was added deliberately so the task is not trivially separable. No real athlete data was used.
 
     Features Included:
-    Biometrics: Age, Height (cm), Resting HR, HRV (Heart Rate Variability).
-    Load/Performance: Last Training Duration (mins), Last Session RPE (Perceived Exertion).
+    Biometrics: Age, Height (cm), Resting HR.
+    Load/Performance: Last Training Duration (mins).
     Wellness/Recovery: Sleep Hours, Fatigue Level, Muscle Soreness, Stress Level.
     Domain Specific: Menstrual Phase, Pre-Match Injury Flag.
     Target: Match_Ready (Binary: 1 for Ready, 0 for Not Ready).
 
+Project Structure
+volleyball-readiness/
+├── data_sets/
+│   ├── training_set.csv
+│   ├── validation_set.csv
+│   └── test_set.csv
+├── apply_preprocessing.py   # imputation, one-hot encoding, scaling
+├── train_model.py           # logistic regression from scratch
+├── interactive_AI.py        # prediction and personalised advice
+├── main.py                  # entry point
+└── requirements.txt
+
 Technical Architecture
-1. Custom Logistic Regression (train_model.py)
+1. Logistic regression from scratch (train_model.py)
+Loss function: binary cross-entropy, with predictions clipped to avoid log(0).
+Optimisation: batch gradient descent with adjustable learning_rate and iterations.
+Activation: sigmoid, to turn the linear output into a probability.
+Monitoring: with monitor_training=True (the default), the loss is printed every 1000 iterations.
+Evaluation: accuracy_test reports accuracy on the training, validation and test sets.
 
-I implemented a Logistic Regression class from scratch using NumPy to demonstrate a deep understanding of the underlying mathematics.
- . Loss Function: Binary Cross-Entropy.
- . Optimization: Gradient Descent with adjustable learning rate and iterations.
- . Sigmoid Activation: To map linear combinations to probabilities.
+2. Preprocessing (apply_preprocessing.py)
+Preprocessing is split into a fit step and an apply step. Rules are learnt from the training set only and then applied to every dataset, which prevents data leakage.
 
-You can also monitor training by setting monitor_training = True (default) as a parameter for MyLogisticRegression() class.
-It outputs the 1000'th iterations binary cross entropy loss, when run, at the start the loss is 0.6931(3dp), but by the 9000's iteration of training it has a loss of 0.0016(3dp)
+Median imputation: fills missing numeric values with the training median.
+One-hot encoding: converts Menstrual_Phase into numeric columns (Follicular is the baseline category).
+Standard scaling: puts features on the same scale (for example Height in cm and Sleep Hours) so gradient descent converges and the weights are comparable.
 
-As part of the MyLogisticRegression() class you can run the function accuracy_test where the model makes predictions on each row of the 3 data sets.
-It calaculate what percentage it was correct and which show you the models redictions compared to the true label for each row of data ( shown in main file)
+3. Interactive advice (interactive_AI.py)
+When a player enters her details and is predicted not match-ready, the system:
 
+Multiplies each standardised feature by its learned weight to get its contribution to the decision.
+Ranks the actionable features (sleep, resting HR, fatigue, soreness, stress, training duration, injury flag) by how much they reduce readiness.
+Shows up to five of them with a suggested recovery action.
 
-2. Robust Preprocessing (preprocessing.py)
+Age, height and menstrual phase are left out of the advice because they are not something a player can act on.
 
-To ensure data quality, the pipeline includes:
-
-    Median Imputation: Automatically handles missing numeric data.
-    One-Hot Encoding: Converts categorical features like Menstrual_Phase into numerical inputs.
-    Standard Scaling: Normalizes features so that variables with different scales (like Height vs. HRV) are weighted fairly by the model.
-
-3. Interactive AI Advice (interactive_AI.py)
-
-This project goes beyond prediction by offering a coaching recommendation system. When a player enters their information and is flagged as "Not Ready," the system calculates the feature contributions to identify the top 5 negative impacts and suggests specific recovery actions.
+Inputs are validated: non-numeric or out-of-range values are rejected and re-prompted.
 
 Getting Started
 Prerequisites
  - Python 3.x
- - Pandas, NumPy, Scikit-learn
-cd volleyball-readiness
+ - Pandas, NumPy, scikit-learn(scikit-learn is used only for StandardScaler)
+
+Installation
+git clone https://github.com/matildascode/volleyball_ML.git
+cd volleyball_ML
 pip install -r requirements.txt
 
 Usage:
 Run the main script to train the model and enter player data for a real-time prediction:
     python main.py
+
+Limitations
+The data is synthetic and small, so results should not be read as real-world performance.
+Logistic regression is a linear model and cannot capture interactions between features.
+The advice comes from learned weights and is not medical or coaching guidance.
+Menstrual phase weights are relative to the Follicular baseline and reflect only the synthetic data.
+
+Future Improvements
+Train and validate on real, consented athlete data.
+Tune learning_rate and iterations using the validation set.
+Pplot the loss curve.
